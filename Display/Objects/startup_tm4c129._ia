@@ -1,0 +1,6 @@
+--cpu Cortex-M4.fp --pd "__EVAL SETA 1" -g --apcs=interwork 
+-I "C:\Users\Vinicius\Google Drive\TCC 1\Display\RTE"
+-I C:\Keil_v5\ARM\PACK\ARM\CMSIS\4.2.0\CMSIS\Include
+-I C:\Keil_v5\ARM\PACK\Keil\TM4C_DFP\1.0.0\Device\Include\TM4C129
+--pd "__UVISION_VERSION SETA 513" --pd "_RTE_ SETA 1" --pd "TM4C1294NCPDT SETA 1"
+--list .\listings\startup_tm4c129.lst --xref -o .\objects\startup_tm4c129.o --depend .\objects\startup_tm4c129.d "RTE\Device\TM4C1294NCPDT\startup_TM4C129.s"
