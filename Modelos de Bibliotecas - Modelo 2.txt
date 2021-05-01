@@ -1,0 +1,119 @@
+BIBLIOTECA LCD
+
+
+proporciona a comunicação com Lcds (com HD44780 controladores compatíveis) através da interface de 4 bits.
+
+É de uso obrigatório dessa biblioteca a colocação desse seguinte código:
+
+//Configura a saída dos Pinos do LCD.
+sbit LCD_RS at RB4_bit;
+sbit LCD_EN at RB5_bit; 
+sbit LCD_D7 at RB3_bit; 
+sbit LCD_D6 at RB2_bit; 
+sbit LCD_D5 at RB1_bit; 
+sbit LCD_D4 at RB0_bit; 
+//Configura a direção dos pinos do LCD. 
+sbit LCD_RS_Direction at TRISB4_bit; 
+sbit LCD_EN_Direction at TRISB5_bit; 
+sbit LCD_D7_Direction at TRISB3_bit; 
+sbit LCD_D6_Direction at TRISB2_bit; 
+sbit LCD_D5_Direction at TRISB1_bit; 
+sbit LCD_D4_Direction at TRISB0_bit; 
+
+
+Rotinas:
+
+LCD_Init() - Inicializa o módulo LCD.
+
+
+
+LCD_Out(char row, char column, char text) -Escreve um texto qualquer no LCD.
+     row - Em qual linha será inserido o texto.
+     colunm - Em qual coluna será inserido o texto.
+     text - Texto qualquer.
+
+
+
+LCD_Out_Cp(char text) - Escreve o texto na posição atual do cursor.
+
+
+
+LCD_Chr(char row, char column, char out_char) - Escreve uma caracter no LCD.
+     row - Em qual linha será inserido o texto.
+     colunm - Em qual coluna será inserido o texto.
+     out_char - código do caracter a ser inserido (ver tabela ASCII).
+
+LCD_Chr_Cp(char out_char) - Escreve um caracter na posição atual do cursor.
+
+Lcd_Cmd(char out_char) - Envia um comando ao LCD.
+COMANDOS:
+_LCD_FIRST_ROW - Mover o cursor para a linha 1
+_LCD_SECOND_ROW - Mover o cursor para a linha 2
+_LCD_THIRD_ROW - Mover o cursor para a linha 3
+_LCD_FOURTH_ROW - Mover o cursor para a linha 4
+_LCD_CLEAR - Limpa o display
+_LCD_RETURN_HOME -  Retorna o cursor para posição inicial.
+_LCD_CURSOR_OFF - Desliga o cursor.
+_LCD_UNDERLINE_ON - sublinha o cursor.
+_LCD_BLINK_CURSOR_ON - Liga o pisca-pisca do cursor.
+_LCD_MOVE_CURSOR_LEFT - Move o cursor para esquerda.
+_LCD_MOVE_CURSOR_RIGHT -  Mover cursor para a direita.
+_LCD_TURN_ON - LCD Desligado.
+_LCD_TURN_OFF - LCD ligado.
+_LCD_SHIFT_LEFT -  Move o texto todo para a esquerda.
+_LCD_SHIFT_RIGHT -  Move o texto todo para a direita.
+
+EXEMPLO:
+
+// LCD module connections
+sbit LCD_RS at RB4_bit;
+sbit LCD_EN at RB5_bit;
+sbit LCD_D4 at RB0_bit;
+sbit LCD_D5 at RB1_bit;
+sbit LCD_D6 at RB2_bit;
+sbit LCD_D7 at RB3_bit;
+sbit LCD_RS_Direction at TRISB4_bit;
+sbit LCD_EN_Direction at TRISB5_bit;
+sbit LCD_D4_Direction at TRISB0_bit;
+sbit LCD_D5_Direction at TRISB1_bit;
+sbit LCD_D6_Direction at TRISB2_bit;
+sbit LCD_D7_Direction at TRISB3_bit;
+// End LCD module connections
+char txt1[] = "mikroElektronika";
+char txt2[] = "EasyPIC6";
+char txt3[] = "Lcd4bit";
+char txt4[] = "example";
+char i;                              // Loop variable
+void Move_Delay() {                  // Function used for text moving
+  Delay_ms(500);                     // You can change the moving speed here}
+void main(){
+  ANSEL  = 0;                        // Configure AN pins as digital I/O
+  ANSELH = 0;
+  C1ON_bit = 0;                      // Disable comparators
+  C2ON_bit = 0;
+  Lcd_Init();                        // Initialize LCD
+  Lcd_Cmd(_LCD_CLEAR);               // Clear display
+  Lcd_Cmd(_LCD_CURSOR_OFF);          // Cursor off
+  Lcd_Out(1,6,txt3);                 // Write text in first row
+  Lcd_Out(2,6,txt4);                 // Write text in second row
+  Delay_ms(2000);
+  Lcd_Cmd(_LCD_CLEAR);               // Clear display
+  Lcd_Out(1,1,txt1);                 // Write text in first row
+  Lcd_Out(2,5,txt2);                 // Write text in second row
+  Delay_ms(2000);
+  // Moving text
+  for(i=0; i<4; i++) {               // Move text to the right 4 times
+    Lcd_Cmd(_LCD_SHIFT_RIGHT);
+    Move_Delay();
+  }
+  while(1) {                         // Endless loop
+    for(i=0; i<8; i++) {             // Move text to the left 7 times
+      Lcd_Cmd(_LCD_SHIFT_LEFT);
+      Move_Delay();
+    }
+    for(i=0; i<8; i++) {             // Move text to the right 7 times
+      Lcd_Cmd(_LCD_SHIFT_RIGHT);
+      Move_Delay();
+    }
+  }
+}
